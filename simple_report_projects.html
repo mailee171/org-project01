@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>조직이론 팀 프로젝트 6선 — 보고서형</title>
+<style>
+  :root {
+    --bg: #F8F7F4;
+    --bg2: #F1EFE8;
+    --bg3: #FFFFFF;
+    --border: rgba(0,0,0,0.10);
+    --border2: rgba(0,0,0,0.06);
+    --text: #2C2C2A;
+    --text2: #5F5E5A;
+    --text3: #888780;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 2rem 1.5rem 4rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  /* ── 헤더 ── */
+  .page-header { margin-bottom: 1.8rem; }
+  .page-header h1 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--text3); }
+
+  /* ── 조건 칩 ── */
+  .cond-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .chip {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .chip b { color: var(--text); font-weight: 600; }
+
+  /* ── 공통 흐름 박스 ── */
+  .flow-box {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 2rem;
+  }
+  .flow-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .flow-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .flow-step {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 11px 13px;
+    border: 0.5px solid var(--border2);
+  }
+  .flow-wk { font-size: 10px; font-weight: 600; color: var(--text3); margin-bottom: 4px; }
+  .flow-act { font-size: 11px; color: var(--text2); line-height: 1.55; }
+  .flow-act b { color: var(--text); font-weight: 600; }
+
+  /* ── 프로젝트 카드 ── */
+  .grid { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px 14px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 5px; height: 100%;
+  }
+  .top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .card-num { font-size: 11px; font-weight: 600; letter-spacing: .06em; margin-bottom: 3px; }
+  .card-title { font-size: 15px; font-weight: 600; color: var(--text); margin: 0 0 7px; line-height: 1.4; }
+  .card-desc { font-size: 12px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; }
+  .diff-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; white-space: nowrap; font-weight: 500; flex-shrink: 0; }
+
+  /* ── 주차 박스 ── */
+  .weeks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; margin-bottom: 11px; }
+  .week {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    border: 0.5px solid var(--border2);
+  }
+  .week-label { font-size: 10px; font-weight: 600; color: var(--text3); margin-bottom: 4px; }
+  .week-task { font-size: 11px; color: var(--text2); line-height: 1.5; list-style: none; }
+  .week-task li { margin-bottom: 2px; padding-left: 10px; position: relative; }
+  .week-task li::before { content: "·"; position: absolute; left: 0; color: var(--text3); }
+
+  /* ── 보고서 구성 ── */
+  .report-box {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 10px 13px;
+    border: 0.5px solid var(--border2);
+    margin-bottom: 10px;
+  }
+  .report-label { font-size: 10px; font-weight: 600; color: var(--text3); margin-bottom: 6px; }
+  .report-sections { display: flex; flex-wrap: wrap; gap: 5px; }
+  .rs { font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 0.5px solid; }
+
+  /* ── 하단 바 ── */
+  .bottom-row {
+    display: flex; gap: 12px;
+    padding-top: 9px;
+    border-top: 0.5px solid var(--border2);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .meta { font-size: 11px; color: var(--text2); }
+  .meta b { color: var(--text); font-weight: 600; }
+  .concept-badge {
+    font-size: 11px; padding: 2px 10px; border-radius: 20px;
+    font-weight: 500; background: var(--bg2); color: var(--text2);
+    border: 0.5px solid var(--border);
+  }
+
+  /* ── 색상 ── */
+  .a1 { background: #534AB7; } .n1 { color: #534AB7; }
+  .e1 { background: #EEEDFE; color: #3C3489; }
+  .r1 { border-color: #AFA9EC; color: #534AB7; background: #EEEDFE; }
+
+  .a2 { background: #1D9E75; } .n2 { color: #1D9E75; }
+  .e2 { background: #E1F5EE; color: #085041; }
+  .r2 { border-color: #5DCAA5; color: #0F6E56; background: #E1F5EE; }
+
+  .a3 { background: #D85A30; } .n3 { color: #D85A30; }
+  .e3 { background: #FAECE7; color: #712B13; }
+  .r3 { border-color: #F0997B; color: #993C1D; background: #FAECE7; }
+
+  .a4 { background: #185FA5; } .n4 { color: #185FA5; }
+  .e4 { background: #E6F1FB; color: #0C447C; }
+  .r4 { border-color: #85B7EB; color: #185FA5; background: #E6F1FB; }
+
+  .a5 { background: #BA7517; } .n5 { color: #BA7517; }
+  .e5 { background: #FAEEDA; color: #633806; }
+  .r5 { border-color: #EF9F27; color: #854F0B; background: #FAEEDA; }
+
+  .a6 { background: #993556; } .n6 { color: #993556; }
+  .e6 { background: #FBEAF0; color: #4B1528; }
+  .r6 { border-color: #ED93B1; color: #993556; background: #FBEAF0; }
+
+  @media (max-width: 600px) {
+    .flow-row, .weeks { grid-template-columns: 1fr; }
+    body { padding: 1rem 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>조직이론 — 팀 프로젝트 6선</h1>
+  <p>3주 미니 프로젝트 · 팀 3~4명 · 4장 조직환경 / 5장 조직간 관계 / 6장 글로벌 환경 조직설계</p>
+</div>
+
+<div class="cond-bar">
+  <div class="chip"><b>대면 토의</b> 주 1회 1시간 × 3주</div>
+  <div class="chip"><b>온라인 보완</b> 카톡 가능</div>
+  <div class="chip"><b>보고서</b> A4 2~3장</div>
+  <div class="chip"><b>이론 연결</b> 개념 1~2개</div>
+</div>
+
+<div class="flow-box">
+  <div class="flow-title">공통 주차별 대면 1시간 활용법</div>
+  <div class="flow-row">
+    <div class="flow-step">
+      <div class="flow-wk">1주차 대면</div>
+      <div class="flow-act"><b>주제 확정 + 역할 분배</b><br>소재·비교 대상 합의, 조사 항목 나누기</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-wk">2주차 대면</div>
+      <div class="flow-act"><b>자료 공유 + 분석 토의</b><br>각자 조사 내용 공유, 이론 개념 1~2개 연결</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-wk">3주차 대면</div>
+      <div class="flow-act"><b>초안 검토 + 최종 완성</b><br>보고서 초안 점검, 결론 함께 작성, 제출</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- P01 -->
+  <div class="card">
+    <div class="card-accent a1"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n1">PROJECT 01</div>
+        <div class="card-title">☕ 카페 두 곳의 환경 불확실성 비교</div>
+      </div>
+      <span class="diff-badge e1">부담도 ★☆☆</span>
+    </div>
+    <div class="card-desc">스타벅스 vs 동네 카페처럼 친숙한 두 카페를 골라, 각 카페가 처한 환경(경쟁·고객·트렌드)이 얼마나 불확실한지 비교하고 각자가 어떻게 대응하는지 정리한다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>카페 2곳 선정</li><li>비교 항목 합의 및 분배</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>조사 내용 공유</li><li>불확실성 수준 토의</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>결론 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r1">① 두 카페 소개</span>
+        <span class="rs r1">② 환경 요소 비교표</span>
+        <span class="rs r1">③ 이론 적용</span>
+        <span class="rs r1">④ 결론</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>환경 불확실성</b> (단순-복잡 / 안정-불안정)</div>
+      <div class="meta"><b>자료</b> 현장 방문, 앱 리뷰, 뉴스</div>
+    </div>
+  </div>
+
+  <!-- P02 -->
+  <div class="card">
+    <div class="card-accent a2"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n2">PROJECT 02</div>
+        <div class="card-title">🛒 플랫폼 기업의 조직간 관계 분석</div>
+      </div>
+      <span class="diff-badge e2">부담도 ★☆☆</span>
+    </div>
+    <div class="card-desc">쿠팡·배민·카카오 중 하나를 골라 최근 협력·제휴·갈등 사례 3~4건을 수집하고, "왜 이 관계가 필요했는가?"를 자원의존이론으로 간단히 설명한다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>기업 선정</li><li>사례 3~4건 분배 수집</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>사례 공유</li><li>자원의존 해석 토의</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>시사점 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r2">① 기업 소개</span>
+        <span class="rs r2">② 사례 3~4건 요약</span>
+        <span class="rs r2">③ 이론 적용</span>
+        <span class="rs r2">④ 시사점</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>자원의존이론</b> (왜 이 관계가 필요했는가?)</div>
+      <div class="meta"><b>자료</b> 뉴스, 기업 보도자료</div>
+    </div>
+  </div>
+
+  <!-- P06 -->
+  <div class="card">
+    <div class="card-accent a3"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n3">PROJECT 03</div>
+        <div class="card-title">🎮 관심 기업의 환경 변화 대응 스토리</div>
+      </div>
+      <span class="diff-badge e3">부담도 ★★☆</span>
+    </div>
+    <div class="card-desc">팀이 관심 있는 기업(게임사·기획사·식품 브랜드 등 자유 선택)을 골라 최근 주요 사건 2~3건을 '사건-대응-결과' 구조로 정리하고, 그 배경을 이론 개념 1개와 연결한다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>기업 선정 합의</li><li>사건 2~3건 분배</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>사건-대응-결과 공유</li><li>이론 연결 토의</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>교훈 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r3">① 기업 소개</span>
+        <span class="rs r3">② 사건-대응-결과 (2~3건)</span>
+        <span class="rs r3">③ 이론 연결</span>
+        <span class="rs r3">④ 교훈</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>환경 변화 대응</b> 또는 <b>자원의존</b> 중 1개 선택</div>
+      <div class="meta"><b>자료</b> 뉴스, 나무위키, 유튜브</div>
+    </div>
+  </div>
+
+  <!-- NEW 03 -->
+  <div class="card">
+    <div class="card-accent a4"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n4">PROJECT 04</div>
+        <div class="card-title">🍔 배달앱 속 프랜차이즈 vs 동네 식당 비교</div>
+      </div>
+      <span class="diff-badge e4">부담도 ★☆☆</span>
+    </div>
+    <div class="card-desc">배달앱에서 같은 동네의 프랜차이즈와 동네 식당 각 1곳을 골라 메뉴 수·가격·리뷰 반응 방식을 비교하고, 두 조직 중 어느 쪽이 더 유기적인지 판단한다. 앱 캡처만으로 자료 수집이 끝나 준비 부담이 가장 낮다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>식당 2곳 선정</li><li>비교 항목 분배</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>앱 캡처 공유·비교</li><li>유기적·기계적 판단 토의</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>결론 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r4">① 선정 배경</span>
+        <span class="rs r4">② 비교 항목 분석표</span>
+        <span class="rs r4">③ 이론 적용</span>
+        <span class="rs r4">④ 결론</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>기계적·유기적 조직</b> (어느 쪽이 더 유연한가?)</div>
+      <div class="meta"><b>자료</b> 배달앱 캡처, 리뷰 분석</div>
+    </div>
+  </div>
+
+  <!-- NEW 05 -->
+  <div class="card">
+    <div class="card-accent a5"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n5">PROJECT 05</div>
+        <div class="card-title">📱 OTT 두 곳의 전략 비교</div>
+      </div>
+      <span class="diff-badge e5">부담도 ★☆☆</span>
+    </div>
+    <div class="card-desc">넷플릭스·티빙·웨이브 중 두 곳을 골라 콘텐츠 전략·구독료 변화·파트너십을 비교하고, 같은 환경에서 왜 다른 선택을 하는지 이론 개념 1개로 설명한다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>OTT 2곳 선정</li><li>비교 항목 분배</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>조사 내용 공유</li><li>대응 차이 토의</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>종합 평가 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r5">① OTT 시장 환경 한 줄 요약</span>
+        <span class="rs r5">② 두 기업 전략 비교표</span>
+        <span class="rs r5">③ 이론 적용</span>
+        <span class="rs r5">④ 종합 평가</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>환경 불확실성</b> 또는 <b>자원 확보 전략</b> 중 1개 선택</div>
+      <div class="meta"><b>자료</b> OTT 앱, 뉴스, 유튜브</div>
+    </div>
+  </div>
+
+  <!-- NEW 06 -->
+  <div class="card">
+    <div class="card-accent a6"></div>
+    <div class="top-row">
+      <div>
+        <div class="card-num n6">PROJECT 06</div>
+        <div class="card-title">👟 스포츠 브랜드 두 곳의 사건-대응 비교</div>
+      </div>
+      <span class="diff-badge e6">부담도 ★★☆</span>
+    </div>
+    <div class="card-desc">나이키·아디다스·뉴발란스 중 두 곳을 골라 최근 주요 사건(콜라보·논란·신시장 등) 각 2건을 사건-대응-결과로 정리하고 비교한다. 브랜드 SNS와 나무위키만으로도 충분히 완성할 수 있다.</div>
+    <div class="weeks">
+      <div class="week"><div class="week-label">1주차 — 대면</div><ul class="week-task"><li>브랜드 2곳 선정</li><li>사건 후보 목록 분배</li></ul></div>
+      <div class="week"><div class="week-label">2주차 — 대면</div><ul class="week-task"><li>사건-대응-결과 공유</li><li>브랜드 간 차이 비교</li></ul></div>
+      <div class="week"><div class="week-label">3주차 — 대면</div><ul class="week-task"><li>보고서 초안 검토</li><li>시사점 작성 후 제출</li></ul></div>
+    </div>
+    <div class="report-box">
+      <div class="report-label">보고서 구성 (A4 2~3장)</div>
+      <div class="report-sections">
+        <span class="rs r6">① 시장 환경 한 줄 요약</span>
+        <span class="rs r6">② 브랜드A 사건-대응</span>
+        <span class="rs r6">③ 브랜드B 사건-대응</span>
+        <span class="rs r6">④ 비교 및 이론 연결</span>
+      </div>
+    </div>
+    <div class="bottom-row">
+      <span class="concept-badge">핵심 개념</span>
+      <div class="meta"><b>환경 변화 대응</b> 또는 <b>자원의존</b> 중 1개 선택</div>
+      <div class="meta"><b>자료</b> 뉴스, 브랜드 SNS, 나무위키</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
